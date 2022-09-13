@@ -25,6 +25,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.dariomartin.talentoapp.domain.model.Character
+import com.dariomartin.talentoapp.presentation.composables.CharacterDetailView
+import com.dariomartin.talentoapp.presentation.composables.CharactersView
 import com.dariomartin.talentoapp.presentation.theme.TalentoAppTheme
 import com.dariomartin.talentoapp.presentation.viewmodel.CharacterDetailViewModel
 import com.dariomartin.talentoapp.presentation.viewmodel.CharactersViewModel
@@ -68,92 +70,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun CharacterDetailView(id: Int, viewModel: CharacterDetailViewModel = hiltViewModel()) {
-    viewModel.loadCharacter(id)
-
-    val character = viewModel.character.value
-    if (character != null) {
-        Column {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1F),
-                model = character.imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-
-            Text(
-                text = character.name,
-                style = MaterialTheme.typography.h5
-            )
-
-            Text(
-                text = character.description,
-                style = MaterialTheme.typography.body2
-            )
-        }
-    }
-
-}
-
-@Composable
-fun CharactersView(viewModel: CharactersViewModel = hiltViewModel(), onGoToDetails: (Int) -> Unit) {
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        content = {
-            itemsIndexed(viewModel.characters) { index, character ->
-                CharacterListItem(character) { id -> onGoToDetails(id) }
-            }
-        }
-    )
-
-}
-
-@Composable
-fun CharacterListItem(character: Character, onClicked: (Int) -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { onClicked(character.id) })
-    ) {
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1F),
-            model = character.imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
-
-        Divider(
-            color = Color.Red,
-            thickness = 1.dp
-        )
-
-        Text(
-            text = character.name,
-            style = MaterialTheme.typography.h5
-        )
-    }
-}
-
-@Preview
-@Composable
-fun CharacterListItemPrev() {
-    TalentoAppTheme {
-        CharacterListItem(
-            Character(
-                id = 1,
-                name = "Spiderman",
-                imageUrl = "",
-                description = "Character description"
-            )
-        ) {}
     }
 }
