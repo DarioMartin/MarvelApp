@@ -15,6 +15,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.crypto.Cipher.PRIVATE_KEY
+import javax.crypto.Cipher.PUBLIC_KEY
 import javax.inject.Singleton
 
 @Module

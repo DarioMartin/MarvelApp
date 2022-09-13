@@ -1,3 +1,3 @@
 package com.dariomartin.talentoapp.domain.model
 
-data class Character(val id: String, val name: String)
+data class Character(val id: Int, val name: String, val imageUrl: String)

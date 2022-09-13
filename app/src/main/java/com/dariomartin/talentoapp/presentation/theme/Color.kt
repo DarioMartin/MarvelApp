@@ -1,4 +1,4 @@
-package com.dariomartin.talentoapp.ui.theme
+package com.dariomartin.talentoapp.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

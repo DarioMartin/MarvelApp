@@ -28,17 +28,19 @@ android {
 
             def localProperties = new Properties()
             localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-            buildConfigField "String", "API_KEY", "\"${localProperties['apiKey']}\""
+            buildConfigField "String", "PUBLIC_API_KEY", "\"${localProperties['publicApiKey']}\""
+            buildConfigField "String", "PRIVATE_API_KEY", "\"${localProperties['privateApiKey']}\""
 
-            buildConfigField "String", "BASE_URL", "\"https://developer.marvel.com/docs/\""
+            buildConfigField "String", "BASE_URL", "\"https://gateway.marvel.com/docs/\""
         }
 
         debug {
             def localProperties = new Properties()
             localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-            buildConfigField "String", "API_KEY", "\"${localProperties['apiKey']}\""
+            buildConfigField "String", "PUBLIC_API_KEY", "\"${localProperties['publicApiKey']}\""
+            buildConfigField "String", "PRIVATE_API_KEY", "\"${localProperties['privateApiKey']}\""
 
-            buildConfigField "String", "BASE_URL", "\"https://developer.marvel.com/docs/\""
+            buildConfigField "String", "BASE_URL", "\"https://gateway.marvel.com/docs/\""
         }
     }
 
@@ -72,6 +74,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+
+    implementation 'io.coil-kt:coil-compose:2.1.0'
 
     //RETROFIT
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
