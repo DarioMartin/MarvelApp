@@ -5,5 +5,5 @@ import com.dariomartin.talentoapp.domain.model.Character
 
 interface ICharactersRepository {
     suspend fun getCharacters(): Response<List<Character>>
-    suspend fun getCharacterDetails(id: String): Response<Character>
+    suspend fun getCharacterDetails(id: Int): Response<Character>
 }

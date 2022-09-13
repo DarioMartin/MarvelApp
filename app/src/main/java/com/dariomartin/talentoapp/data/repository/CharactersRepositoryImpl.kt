@@ -12,7 +12,7 @@ class CharactersRepositoryImpl(
         return remoteDataSource.getCharacters()
     }
 
-    override suspend fun getCharacterDetails(id: String): Response<Character> {
+    override suspend fun getCharacterDetails(id: Int): Response<Character> {
         return remoteDataSource.getCharacter(id)
     }
 }

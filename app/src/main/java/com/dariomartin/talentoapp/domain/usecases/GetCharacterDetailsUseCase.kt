@@ -6,7 +6,7 @@ import com.dariomartin.talentoapp.domain.repository.ICharactersRepository
 
 class GetCharacterDetailsUseCase(private val repository: ICharactersRepository) {
 
-    suspend operator fun invoke(id: String): Response<Character> {
+    suspend operator fun invoke(id: Int): Response<Character> {
         return repository.getCharacterDetails(id)
     }
 

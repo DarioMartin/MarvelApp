@@ -41,11 +41,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCharactersUseCases(repository: ICharactersRepository): CharactersUseCases {
-        return CharactersUseCases(
-            getCharactersUseCase = GetCharactersUseCase(repository),
-            getCharacterDetailsUseCase = GetCharacterDetailsUseCase(repository)
-        )
+    fun provideCharacterDetailsUseCase(repository: ICharactersRepository): GetCharacterDetailsUseCase {
+        return GetCharacterDetailsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCharactersUseCase(repository: ICharactersRepository): GetCharactersUseCase {
+        return GetCharactersUseCase(repository)
     }
 
 }

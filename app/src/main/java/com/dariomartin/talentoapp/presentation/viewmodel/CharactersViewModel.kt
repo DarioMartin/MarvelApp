@@ -6,12 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.dariomartin.talentoapp.data.Response
 import com.dariomartin.talentoapp.domain.model.Character
 import com.dariomartin.talentoapp.domain.usecases.CharactersUseCases
+import com.dariomartin.talentoapp.domain.usecases.GetCharactersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CharactersViewModel @Inject constructor(private val useCases: CharactersUseCases) :
+class CharactersViewModel @Inject constructor(private val getCharactersUseCase: GetCharactersUseCase) :
     ViewModel() {
 
     var characters = mutableStateListOf<Character>()
@@ -22,7 +23,7 @@ class CharactersViewModel @Inject constructor(private val useCases: CharactersUs
 
     private fun loadCharacters() {
         viewModelScope.launch {
-            val response = useCases.getCharactersUseCase()
+            val response = getCharactersUseCase()
             characters.clear()
             when (response) {
                 is Response.Error -> {

@@ -28,7 +28,7 @@ class ServerDataSource(private val charactersApi: CharactersApi) : IRemoteDataSo
         }
     }
 
-    override suspend fun getCharacter(id: String): Response<Character> {
+    override suspend fun getCharacter(id: Int): Response<Character> {
         return try {
             val ts = System.currentTimeMillis()
             val hash = getHash(ts)
@@ -39,7 +39,9 @@ class ServerDataSource(private val charactersApi: CharactersApi) : IRemoteDataSo
                 ts = ts,
                 hash = hash
             )
-            Response.Error("Could not load the character")
+            response.body()?.data?.results?.firstOrNull()
+                ?.let { Response.Success(data = it.toModelCharacter()) }
+                ?: Response.Error("Could not load the character")
         } catch (e: Exception) {
             Response.Error("Could not load the character")
         }
