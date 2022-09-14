@@ -30,11 +30,16 @@ class ServerDataSource(private val charactersApi: CharactersApi) : IRemoteDataSo
                 hash = hash,
                 query = query.ifEmpty { null }
             )
-            response.body()?.let { Response.Success(data = it) }
-                ?: Response.Error("Could not load the characters")
+
+            if (response.isSuccessful) {
+                response.body()?.let { Response.Success(data = it) }
+                    ?: Response.Error(response.message() ?: "Could not load the characters")
+            } else {
+                Response.Error(response.message() ?: "Could not load the characters")
+            }
 
         } catch (e: Exception) {
-            Response.Error("Could not load the characters")
+            Response.Error(e.localizedMessage ?: "Could not load the characters")
         }
     }
 

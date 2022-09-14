@@ -18,10 +18,7 @@ class CharactersPagingSource(private val dataSource: IRemoteDataSource, private 
 
 
     override fun getRefreshKey(state: PagingState<Int, Character>): Int? {
-        return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(LIMIT)
-                ?: state.closestPageToPosition(it)?.nextKey?.minus(LIMIT)
-        }
+        return 0
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
@@ -41,8 +38,14 @@ class CharactersPagingSource(private val dataSource: IRemoteDataSource, private 
                 is Response.Success -> {
                     val data = response.data
 
+                    val responseOffset = data?.data?.offset ?: 0
+                    val responseLimit = data?.data?.limit ?: 0
+                    val responseTotal = data?.data?.total ?: 0
+
                     val prevKey = null
-                    val nextKey = (data?.data?.offset ?: 0) + LIMIT
+                    val nextKey =
+                        if (responseOffset + responseLimit >= responseTotal) null
+                        else responseOffset + LIMIT
 
                     LoadResult.Page(
                         data = data?.data?.results?.map { it.toModelCharacter() } ?: listOf(),

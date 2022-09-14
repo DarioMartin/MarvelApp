@@ -43,7 +43,7 @@ fun CharacterListItem(
             )
 
             Divider(
-                color = Color.Red,
+                color = MaterialTheme.colors.primary,
                 thickness = 3.dp
             )
 

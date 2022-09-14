@@ -10,10 +10,10 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -34,15 +34,17 @@ fun CharacterDetailView(id: Int, viewModel: CharacterDetailViewModel = hiltViewM
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .aspectRatio(5 / 6F),
+                        .aspectRatio(6 / 5F),
                     model = character.imageUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
 
                 Divider(
-                    modifier = Modifier.fillMaxHeight().width(5.dp),
-                    color = Color.Red
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(5.dp),
+                    color = MaterialTheme.colors.primary,
                 )
 
                 CharacterDetailsBody(character = character)
@@ -60,7 +62,7 @@ fun CharacterDetailView(id: Int, viewModel: CharacterDetailViewModel = hiltViewM
                 )
 
                 Divider(
-                    color = Color.Red,
+                    color = MaterialTheme.colors.primary,
                     thickness = 5.dp
                 )
 
@@ -76,7 +78,8 @@ fun CharacterDetailsBody(character: Character) {
         item {
             Text(
                 text = character.name,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Medium
             )
         }
 
@@ -158,13 +161,13 @@ fun CollectionHeader(name: String, expanded: Boolean, onExpandedChange: (Boolean
 
 @Composable
 fun CollectionItem(name: String, onClick: () -> Unit) {
-    TextButton(onClick = { onClick() }) {
+    TextButton(modifier = Modifier.fillMaxWidth(), onClick = { onClick() }) {
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = name,
             style = MaterialTheme.typography.body2,
-            fontWeight = FontWeight.Light
+            fontWeight = FontWeight.Normal,
+            textAlign = TextAlign.Start
         )
     }
 }
-
-//Configuration.ORIENTATION_LANDSCAPE
