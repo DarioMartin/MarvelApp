@@ -90,7 +90,7 @@ fun CharactersView(
                                     style = MaterialTheme.typography.h4
                                 )
                                 Divider(
-                                    color = Color.Red,
+                                    color = MaterialTheme.colors.onBackground,
                                     thickness = 1.dp
                                 )
                             }
