@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cd_marvel_logo">Logo de Marvel</string>
+    <string name="general_error_title">Se ha producido un error al recuperar los personajes</string>
+    <string name="general_error_body">No hemos podido procesar la solicitud, por favor compruebe su conexión e inténtelo de nuevo.</string>
+    <string name="retry">Reintentar</string>
+    <string name="empty_list_title">No se han encontrado personajes</string>
+    <string name="empty_list_body">No hemos encontrado ningún personaje que coincida con el valor buscado, por favor, pruebe con otro.</string>
+    <string name="cd_search_icon">Icono de búsqueda</string>
+    <string name="character_name">Nombre del personaje</string>
+    <string name="cd_clear_icon">Icono limpiar</string>
+    <string name="character_error_title">Se ha producido un error al recuperar el carácter</string>
+    <string name="character_error_body">No hemos podido procesar la solicitud, por favor compruebe su conexión e inténtelo de nuevo.</string>
+    <string name="no_description_found">No hay descripción disponible</string>
+    <string name="comics">Comics</string>
+    <string name="series">Series</string>
+    <string name="events">Eventos</string>
+</resources>

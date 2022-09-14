@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
-        applicationId "com.dariomartin.talentoapp"
+        applicationId "com.dariomartin.marvelapp"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -25,11 +25,22 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", "\"https://developer.marvel.com/docs/\""
+
+            def localProperties = new Properties()
+            localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+            buildConfigField "String", "PUBLIC_API_KEY", "\"${localProperties['publicApiKey']}\""
+            buildConfigField "String", "PRIVATE_API_KEY", "\"${localProperties['privateApiKey']}\""
+
+            buildConfigField "String", "BASE_URL", "\"https://gateway.marvel.com/docs/\""
         }
 
         debug {
-            buildConfigField "String", "BASE_URL", "\"https://developer.marvel.com/docs/\""
+            def localProperties = new Properties()
+            localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+            buildConfigField "String", "PUBLIC_API_KEY", "\"${localProperties['publicApiKey']}\""
+            buildConfigField "String", "PRIVATE_API_KEY", "\"${localProperties['privateApiKey']}\""
+
+            buildConfigField "String", "BASE_URL", "\"https://gateway.marvel.com/docs/\""
         }
     }
 
@@ -63,6 +74,16 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+
+    implementation 'io.coil-kt:coil-compose:2.1.0'
+
+    //PAGINATION
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha16'
+
+    //NAVIGATION
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //RETROFIT
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
