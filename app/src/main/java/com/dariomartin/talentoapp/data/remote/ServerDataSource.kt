@@ -6,8 +6,6 @@ import com.dariomartin.talentoapp.data.remote.model.CharactersResponse
 import com.dariomartin.talentoapp.data.repository.IRemoteDataSource
 import com.dariomartin.talentoapp.data.toModelCharacter
 import com.dariomartin.talentoapp.domain.model.Character
-import retrofit2.http.Query
-import java.lang.Exception
 import java.math.BigInteger
 import java.security.MessageDigest
 
@@ -54,11 +52,18 @@ class ServerDataSource(private val charactersApi: CharactersApi) : IRemoteDataSo
                 ts = ts,
                 hash = hash
             )
-            response.body()?.data?.results?.firstOrNull()
-                ?.let { Response.Success(data = it.toModelCharacter()) }
-                ?: Response.Error("Could not load the character")
+
+            if (response.isSuccessful) {
+                response.body()?.data?.results?.firstOrNull()
+                    ?.let { Response.Success(data = it.toModelCharacter()) } ?: Response.Error(
+                    response.message() ?: "Could not load the character"
+                )
+            } else {
+                Response.Error(response.message() ?: "Could not load the character")
+            }
+
         } catch (e: Exception) {
-            Response.Error("Could not load the character")
+            Response.Error(e.localizedMessage ?: "Could not load the character")
         }
     }
 

@@ -8,4 +8,12 @@
     <string name="empty_list_body">We have not found any character that matches the searched value, please try another one.</string>
     <string name="cd_search_icon">Search icon</string>
     <string name="character_name">Character name</string>
+    <string name="cd_clear_icon">Clear icon</string>
+    <string name="character_error_title">An error occurred when retrieving the character</string>
+    <string name="character_error_body">We were unable to process the request, please check your connection and try again.</string>
+    <string name="no_description_found">No description found</string>
+    <string name="comics">Comics</string>
+    <string name="series">Series</string>
+    <string name="events">Events</string>
+
 </resources>

@@ -5,7 +5,7 @@ data class Character(
     val name: String,
     val imageUrl: String,
     val description: String,
-    val comics: List<Pair<String, String>> = emptyList(),
-    val series: List<Pair<String, String>> = emptyList(),
-    val events: List<Pair<String, String>> = emptyList()
+    val comics: List<Resource> = emptyList(),
+    val series: List<Resource> = emptyList(),
+    val events: List<Resource> = emptyList()
 )

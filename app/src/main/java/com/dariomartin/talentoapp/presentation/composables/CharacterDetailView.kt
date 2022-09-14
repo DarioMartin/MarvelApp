@@ -4,76 +4,102 @@ import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.dariomartin.talentoapp.R
 import com.dariomartin.talentoapp.domain.model.Character
+import com.dariomartin.talentoapp.domain.model.Resource
 import com.dariomartin.talentoapp.presentation.viewmodel.CharacterDetailViewModel
+import com.dariomartin.talentoapp.presentation.viewmodel.UIState
 
 @Composable
 fun CharacterDetailView(id: Int, viewModel: CharacterDetailViewModel = hiltViewModel()) {
-    viewModel.loadCharacter(id)
 
-    val character = viewModel.character.value
+    LaunchedEffect(Unit) {
+        viewModel.loadCharacter(id)
+    }
+    val uiState = viewModel.uiState.value
     val configuration = LocalConfiguration.current
+    val imageUrl = if (uiState is UIState.Content) uiState.character.imageUrl else null
 
-    if (character != null) {
-
-        if (configuration.orientation == ORIENTATION_LANDSCAPE) {
-            Row {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(6 / 5F),
-                    model = character.imageUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-
-                Divider(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(5.dp),
-                    color = MaterialTheme.colors.primary,
-                )
-
-                CharacterDetailsBody(character = character)
+    if (configuration.orientation == ORIENTATION_LANDSCAPE) {
+        Row {
+            DetailsImage(imageUrl)
+            Divider(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(5.dp),
+                color = MaterialTheme.colors.primary,
+            )
+            CharacterDetailsBody(uiState = uiState) {
+                viewModel.loadCharacter(id)
             }
+        }
 
-        } else {
-            Column {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(6 / 5F),
-                    model = character.imageUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-
-                Divider(
-                    color = MaterialTheme.colors.primary,
-                    thickness = 5.dp
-                )
-
-                CharacterDetailsBody(character = character)
+    } else {
+        Column {
+            DetailsImage(imageUrl)
+            Divider(
+                color = MaterialTheme.colors.primary,
+                thickness = 5.dp
+            )
+            CharacterDetailsBody(uiState = uiState) {
+                viewModel.loadCharacter(id)
             }
         }
     }
 }
 
 @Composable
-fun CharacterDetailsBody(character: Character) {
+private fun DetailsImage(imageUrl: String?) {
+    AsyncImage(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(6 / 5F),
+        placeholder = painterResource(R.drawable.marvel_eagle_logo),
+        error = painterResource(R.drawable.marvel_eagle_logo),
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .crossfade(true)
+            .build(),
+        contentDescription = null,
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
+private fun CharacterDetailsBody(uiState: UIState, retry: () -> Unit) {
+    when (uiState) {
+        is UIState.Content -> Content(uiState.character)
+        UIState.Error -> Message(
+            title = stringResource(id = R.string.character_error_title),
+            body = stringResource(id = R.string.character_error_body),
+            actionName = stringResource(id = R.string.retry),
+            action = { retry() }
+        )
+        UIState.Loading -> ProgressIndicator()
+    }
+}
+
+@Composable
+fun Content(character: Character) {
     LazyColumn(contentPadding = PaddingValues(18.dp)) {
         item {
             Text(
@@ -83,35 +109,25 @@ fun CharacterDetailsBody(character: Character) {
             )
         }
 
-        item {
-            Spacer(modifier = Modifier.height(12.dp))
-        }
+        item { Spacer(modifier = Modifier.height(12.dp)) }
 
         item {
             Text(
-                text = character.description.ifEmpty { "No description found" },
+                text = character.description.ifEmpty { stringResource(R.string.no_description_found) },
                 style = MaterialTheme.typography.body1,
                 fontWeight = FontWeight.Light
             )
         }
 
-        item {
-            Collection(name = "Comics", values = character.comics)
-        }
-
-        item {
-            Collection(name = "Series", values = character.series)
-        }
-
-        item {
-            Collection(name = "Events", values = character.events)
-        }
+        item { Collection(name = stringResource(R.string.comics), values = character.comics) }
+        item { Collection(name = stringResource(R.string.series), values = character.series) }
+        item { Collection(name = stringResource(R.string.events), values = character.events) }
 
     }
 }
 
 @Composable
-fun Collection(name: String, values: List<Pair<String, String>>) {
+private fun Collection(name: String, values: List<Resource>) {
     if (values.isEmpty()) return
 
     var expanded by remember { mutableStateOf(false) }
@@ -122,18 +138,14 @@ fun Collection(name: String, values: List<Pair<String, String>>) {
 
     if (expanded) {
         values.forEach {
-            CollectionItem(name = it.first) {
-
-            }
+            CollectionItem(name = it.name) {}
         }
     }
 }
 
 @Composable
-fun CollectionHeader(name: String, expanded: Boolean, onExpandedChange: (Boolean) -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onExpandedChange(!expanded) }) {
+private fun CollectionHeader(name: String, expanded: Boolean, onExpandedChange: (Boolean) -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth()) {
 
         Row(modifier = Modifier.fillMaxWidth()) {
 
@@ -145,6 +157,9 @@ fun CollectionHeader(name: String, expanded: Boolean, onExpandedChange: (Boolean
             )
 
             Icon(
+                modifier = Modifier
+                    .clip(shape = CircleShape)
+                    .clickable { onExpandedChange(!expanded) },
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = null
             )
@@ -155,12 +170,10 @@ fun CollectionHeader(name: String, expanded: Boolean, onExpandedChange: (Boolean
             thickness = 1.dp
         )
     }
-
-
 }
 
 @Composable
-fun CollectionItem(name: String, onClick: () -> Unit) {
+private fun CollectionItem(name: String, onClick: () -> Unit) {
     TextButton(modifier = Modifier.fillMaxWidth(), onClick = { onClick() }) {
         Text(
             modifier = Modifier.fillMaxWidth(),

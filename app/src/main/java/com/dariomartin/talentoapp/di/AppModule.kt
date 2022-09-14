@@ -6,7 +6,6 @@ import com.dariomartin.talentoapp.data.remote.ServerDataSource
 import com.dariomartin.talentoapp.data.repository.CharactersRepositoryImpl
 import com.dariomartin.talentoapp.data.repository.IRemoteDataSource
 import com.dariomartin.talentoapp.domain.repository.ICharactersRepository
-import com.dariomartin.talentoapp.domain.usecases.CharactersUseCases
 import com.dariomartin.talentoapp.domain.usecases.GetCharacterDetailsUseCase
 import com.dariomartin.talentoapp.domain.usecases.GetCharactersUseCase
 import dagger.Module
@@ -15,8 +14,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.crypto.Cipher.PRIVATE_KEY
-import javax.crypto.Cipher.PUBLIC_KEY
 import javax.inject.Singleton
 
 @Module

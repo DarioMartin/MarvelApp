@@ -3,6 +3,7 @@ package com.dariomartin.talentoapp.presentation.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dariomartin.talentoapp.R
 import com.dariomartin.talentoapp.data.Response
 import com.dariomartin.talentoapp.domain.model.Character
 import com.dariomartin.talentoapp.domain.usecases.GetCharacterDetailsUseCase
@@ -14,18 +15,25 @@ import javax.inject.Inject
 class CharacterDetailViewModel @Inject constructor(private val getCharacterDetailsUseCase: GetCharacterDetailsUseCase) :
     ViewModel() {
 
-    var character = mutableStateOf<Character?>(null)
+    var uiState = mutableStateOf<UIState>(UIState.Loading)
 
     fun loadCharacter(id: Int) {
         viewModelScope.launch {
             when (val response = getCharacterDetailsUseCase(id)) {
                 is Response.Error -> {
-
+                    uiState.value = UIState.Error
                 }
                 is Response.Success -> {
-                    character.value = response.data
+                    uiState.value =
+                        response.data?.let { UIState.Content(character = it) } ?: UIState.Error
                 }
             }
         }
     }
+}
+
+sealed class UIState {
+    object Loading : UIState()
+    object Error : UIState()
+    data class Content(val character: Character) : UIState()
 }

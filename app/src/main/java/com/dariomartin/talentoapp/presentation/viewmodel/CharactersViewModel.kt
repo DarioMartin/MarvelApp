@@ -15,9 +15,16 @@ class CharactersViewModel @Inject constructor(private val getCharactersUseCase: 
     ViewModel() {
     var searchQuery = mutableStateOf("")
 
-    val charactersFlow = Pager(PagingConfig(pageSize = 20)) {
-        getCharactersUseCase(searchQuery.value)
-    }.flow.cachedIn(viewModelScope)
+    val charactersFlow =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 100,
+                pageSize = 20,
+                prefetchDistance = 20
+            )
+        ) {
+            getCharactersUseCase(searchQuery.value)
+        }.flow.cachedIn(viewModelScope)
 
     fun searchCharacters(query: String) {
         searchQuery.value = query
