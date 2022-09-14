@@ -1,5 +1,6 @@
 package com.dariomartin.talentoapp.presentation.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -12,10 +13,14 @@ import javax.inject.Inject
 @HiltViewModel
 class CharactersViewModel @Inject constructor(private val getCharactersUseCase: GetCharactersUseCase) :
     ViewModel() {
+    var searchQuery = mutableStateOf("")
 
     val charactersFlow = Pager(PagingConfig(pageSize = 20)) {
-        getCharactersUseCase()
+        getCharactersUseCase(searchQuery.value)
     }.flow.cachedIn(viewModelScope)
 
+    fun searchCharacters(query: String) {
+        searchQuery.value = query
+    }
 
 }

@@ -9,7 +9,7 @@ import com.dariomartin.talentoapp.domain.model.Character
 import retrofit2.HttpException
 import java.io.IOException
 
-class CharactersPagingSource(private val dataSource: IRemoteDataSource) :
+class CharactersPagingSource(private val dataSource: IRemoteDataSource, private val query: String) :
     PagingSource<Int, Character>() {
 
     companion object {
@@ -30,7 +30,8 @@ class CharactersPagingSource(private val dataSource: IRemoteDataSource) :
 
             val response = dataSource.getCharacters(
                 limit = LIMIT,
-                offset = offset
+                offset = offset,
+                query = query
             )
 
             when (response) {

@@ -10,8 +10,8 @@ class CharactersRepositoryImpl(
     private val remoteDataSource: IRemoteDataSource
 ) : ICharactersRepository {
 
-    override fun getCharacters(): PagingSource<Int, Character> {
-        return CharactersPagingSource(remoteDataSource)
+    override fun getCharacters(query: String): PagingSource<Int, Character> {
+        return CharactersPagingSource(remoteDataSource, query)
     }
 
     override suspend fun getCharacterDetails(id: Int): Response<Character> {

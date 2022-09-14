@@ -15,6 +15,7 @@ interface CharactersApi {
         @Query("apikey") apiKey: String,
         @Query("ts") ts: Long,
         @Query("hash") hash: String,
+        @Query("nameStartsWith") query: String?,
     ): Response<CharactersResponse>
 
     @GET("/v1/public/characters/{id}")

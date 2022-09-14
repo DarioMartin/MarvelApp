@@ -6,8 +6,8 @@ import com.dariomartin.talentoapp.domain.repository.ICharactersRepository
 
 class GetCharactersUseCase(private val repository: ICharactersRepository) {
 
-    operator fun invoke(): PagingSource<Int, Character> {
-        return repository.getCharacters()
+    operator fun invoke(query: String): PagingSource<Int, Character> {
+        return repository.getCharacters(query)
     }
 
 }
