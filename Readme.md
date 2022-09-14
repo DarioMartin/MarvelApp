@@ -13,6 +13,7 @@ Build
 You can build the app using Android Studio and adding in your local.properties file the following
 constants:
 > publicApiKey=YOUR_MARVEL_PUBLIC_API_KEY
+
 > privateApiKey=YOUR_MARVEL_PRIVATE_API_KEY
 
 About the exercise
