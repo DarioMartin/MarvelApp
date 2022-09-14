@@ -19,11 +19,13 @@ internal class CharactersPagingSourceTest {
 
     private lateinit var mockCharacters: List<Character>
     private lateinit var remoteDataSource: IRemoteDataSource
+    private lateinit var errorRemoteDataSource: IRemoteDataSource
 
     @Before
     fun setup() {
         mockCharacters = createCharacters(TOTAL_ITEMS)
         remoteDataSource = MockRemoteDataSource(success = true, characters = mockCharacters)
+        errorRemoteDataSource = MockRemoteDataSource(success = false, characters = mockCharacters)
     }
 
     @Test
@@ -77,14 +79,14 @@ internal class CharactersPagingSourceTest {
 
         assertThat(
             PagingSource.LoadResult.Page(
-                data = listOf(mockCharacters[TOTAL_ITEMS-2], mockCharacters[TOTAL_ITEMS-1]),
+                data = listOf(mockCharacters[TOTAL_ITEMS - 2], mockCharacters[TOTAL_ITEMS - 1]),
                 prevKey = null,
                 nextKey = 100
             )
         ).isEqualTo(
             pagingSource.load(
                 PagingSource.LoadParams.Refresh(
-                    key = TOTAL_ITEMS-2,
+                    key = TOTAL_ITEMS - 2,
                     loadSize = 2,
                     placeholdersEnabled = false
                 )
@@ -99,14 +101,14 @@ internal class CharactersPagingSourceTest {
 
         assertThat(
             PagingSource.LoadResult.Page(
-                data = listOf(mockCharacters[TOTAL_ITEMS-1]),
+                data = listOf(mockCharacters[TOTAL_ITEMS - 1]),
                 prevKey = null,
                 nextKey = null
             )
         ).isEqualTo(
             pagingSource.load(
                 PagingSource.LoadParams.Refresh(
-                    key = TOTAL_ITEMS-1,
+                    key = TOTAL_ITEMS - 1,
                     loadSize = 2,
                     placeholdersEnabled = false
                 )
@@ -133,6 +135,24 @@ internal class CharactersPagingSourceTest {
                     placeholdersEnabled = false
                 )
             )
+        )
+    }
+
+    @Test
+    fun `test error query`() = runTest {
+        val query = ""
+        val pagingSource = CharactersPagingSource(errorRemoteDataSource, query)
+
+        assertThat(
+            pagingSource.load(
+                PagingSource.LoadParams.Refresh(
+                    key = 0,
+                    loadSize = 2,
+                    placeholdersEnabled = false
+                )
+            )
+        ).isInstanceOf(
+            PagingSource.LoadResult.Error::class.java
         )
     }
 
