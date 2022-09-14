@@ -25,7 +25,9 @@ class MockRemoteDataSource(private val success: Boolean, private val characters:
     }
 
     override suspend fun getCharacter(id: Int): Response<Character> {
-        return Response.Error("")
+        val character = characters.firstOrNull { it.id == id }
+        return if (success && character != null) Response.Success(data = character)
+        else Response.Error("")
     }
 
 }

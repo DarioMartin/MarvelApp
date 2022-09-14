@@ -12,7 +12,7 @@ import java.io.IOException
 class CharactersPagingSource(private val dataSource: IRemoteDataSource, private val query: String) :
     PagingSource<Int, Character>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Character>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Character>): Int {
         return 0
     }
 
