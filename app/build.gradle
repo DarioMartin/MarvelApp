@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.dariomartin.talentoapp"
+        applicationId "com.dariomartin.marvelapp"
         minSdk 21
         targetSdk 33
         versionCode 1

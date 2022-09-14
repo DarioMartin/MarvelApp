@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TalentoApp</string>
+    <string name="app_name">MarvelApp</string>
     <string name="cd_marvel_logo">Marvel logo</string>
     <string name="general_error_title">An error occurred when retrieving the characters</string>
     <string name="general_error_body">We were unable to process the request, please check your connection and try again.</string>
